@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\ChatGroups\" />
     <Folder Include="Features\ChatGroups\Handlers\Commands\" />
     <Folder Include="Features\ChatGroups\Handlers\Queries\" />
     <Folder Include="Features\ChatGroups\Requests\Commands\" />

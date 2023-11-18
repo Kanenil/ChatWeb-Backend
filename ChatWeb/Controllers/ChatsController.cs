@@ -54,16 +54,4 @@ public class ChatsController : ControllerBase
         var response = await _mediator.Send(command);
         return Ok(response);
     }
-
-    // PUT api/<ChatsController>/5
-    [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
-    {
-    }
-
-    // DELETE api/<ChatsController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
-    }
 }
