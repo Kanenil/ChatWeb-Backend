@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatWeb.Application.DTOs.Users;
 using ChatWeb.Application.Models.Requests;
 using ChatWeb.Domain.Identity;
 
@@ -10,5 +11,6 @@ public class UsersProfile : Profile
     {
         CreateMap<RegistrationRequest, UserEntity>()
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
+        CreateMap<UserEntity, ChatUserDTO>();
     }
 }

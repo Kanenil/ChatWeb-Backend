@@ -10,10 +10,23 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ChatWeb.Domain\ChatWeb.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs\ChatGroups\" />
+    <Folder Include="Features\ChatGroups\Handlers\Commands\" />
+    <Folder Include="Features\ChatGroups\Handlers\Queries\" />
+    <Folder Include="Features\ChatGroups\Requests\Commands\" />
+    <Folder Include="Features\ChatGroups\Requests\Queries\" />
+    <Folder Include="Features\Messages\Handlers\Commands\" />
+    <Folder Include="Features\Messages\Handlers\Queries\" />
+    <Folder Include="Features\Messages\Requests\Commands\" />
+    <Folder Include="Features\Messages\Requests\Queries\" />
   </ItemGroup>
 
 </Project>

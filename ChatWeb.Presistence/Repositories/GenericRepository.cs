@@ -31,7 +31,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public virtual async Task<IReadOnlyList<T>> GetAllAsync()
     {
-        return await _dbContext.Set<T>().ToListAsync();
+        return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
     }
 
     public virtual async Task<T> GetAsync(int id)
@@ -39,8 +39,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return await _dbContext.Set<T>().FindAsync(id);
     }
 
+    public async Task SaveAsync()
+    {
+        await _dbContext.SaveChangesAsync();
+    }
+
     public virtual async Task UpdateAsync(T entity)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
     }
+
+
 }

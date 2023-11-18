@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ChatWeb.Application.Contracts.Persistence;
+using ChatWeb.Presistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,11 @@ public static class PersistenceServicesRegistration
         services.AddDbContext<ChatDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("ChatConnectionString")));
+
+        services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        services.AddTransient<IChatRepository, ChatRepository>();
+        services.AddTransient<IUsersRepository, UsersRepository>();
 
         return services;
     }
