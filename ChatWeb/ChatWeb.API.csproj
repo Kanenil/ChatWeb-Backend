@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ChatWeb.Application\ChatWeb.Application.csproj" />
     <ProjectReference Include="..\ChatWeb.Infrastructure\ChatWeb.Infrastructure.csproj" />
     <ProjectReference Include="..\ChatWeb.Presistence\ChatWeb.Presistence.csproj" />
