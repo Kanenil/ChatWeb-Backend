@@ -54,4 +54,15 @@ public class ChatsController : ControllerBase
         var response = await _mediator.Send(command);
         return Ok(response);
     }
+
+    // POST api/<ChatsController>
+    [HttpPost("{chatId}/add/{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
+    public async Task<ActionResult<BaseCommandResponse>> AddUserToChat(int chatId, int userId)
+    {
+        var command = new AddUserToChatCommand(chatId, userId);
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
 }

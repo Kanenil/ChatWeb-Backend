@@ -1,5 +1,4 @@
 ﻿using ChatWeb.Domain;
-using ChatWeb.Domain.Identity;
 
 namespace ChatWeb.Application.Contracts.Persistence;
 
