@@ -18,6 +18,7 @@ public static class PersistenceServicesRegistration
 
         services.AddTransient<IChatRepository, ChatRepository>();
         services.AddTransient<IUsersRepository, UsersRepository>();
+        services.AddTransient<IMessagesRepository, MessagesRepository>();
 
         return services;
     }

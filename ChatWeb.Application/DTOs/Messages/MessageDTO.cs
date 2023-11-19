@@ -2,8 +2,5 @@
 
 namespace ChatWeb.Application.DTOs.Messages;
 
-public class MessageDTO
-{
-    public string Content { get; set; }
-    public ChatUserDTO User { get; set; }
-}
+public record MessageDTO(int Id, string Content, DateTime DateCreated, ChatUserDTO User)
+{}

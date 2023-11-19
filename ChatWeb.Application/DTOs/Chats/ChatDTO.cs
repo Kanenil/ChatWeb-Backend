@@ -5,6 +5,7 @@ namespace ChatWeb.Application.DTOs.Chats;
 
 public class ChatDTO
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string? Image { get; set; }
     public IEnumerable<ChatUserDTO> Users { get; set; }

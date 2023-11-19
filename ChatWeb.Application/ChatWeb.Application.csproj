@@ -17,15 +17,4 @@
     <ProjectReference Include="..\ChatWeb.Domain\ChatWeb.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\ChatGroups\Handlers\Commands\" />
-    <Folder Include="Features\ChatGroups\Handlers\Queries\" />
-    <Folder Include="Features\ChatGroups\Requests\Commands\" />
-    <Folder Include="Features\ChatGroups\Requests\Queries\" />
-    <Folder Include="Features\Messages\Handlers\Commands\" />
-    <Folder Include="Features\Messages\Handlers\Queries\" />
-    <Folder Include="Features\Messages\Requests\Commands\" />
-    <Folder Include="Features\Messages\Requests\Queries\" />
-  </ItemGroup>
-
 </Project>
