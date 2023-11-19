@@ -39,4 +39,16 @@ public class UsersRepository : GenericRepository<UserEntity>, IUsersRepository
                 .ThenInclude(x => x.Chat)
             .FirstAsync(x => x.UserName == username);
     }
+
+    public async Task<IEnumerable<UserEntity>> GetUsersByUsernameSearchAsync(string searchBy, string username)
+    {
+        return await _dbContext.Users
+            .Include(x => x.Messages)
+                .ThenInclude(x => x.Chat)
+            .Include(x => x.ChatGroups)
+                .ThenInclude(x => x.Chat)
+            .Where(x => x.UserName.ToLower().Contains(searchBy.ToLower()))
+            .Where(x => x.UserName != username)
+            .ToListAsync();
+    }
 }

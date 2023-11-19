@@ -12,5 +12,6 @@ public class UsersProfile : Profile
         CreateMap<RegistrationRequest, UserEntity>()
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
         CreateMap<UserEntity, ChatUserDTO>();
+        CreateMap<UserEntity, UserDTO>();
     }
 }
