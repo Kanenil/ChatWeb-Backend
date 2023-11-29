@@ -10,13 +10,15 @@ public class GetChatByIdRequestHandler : IRequestHandler<GetChatByIdRequest, Cha
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IMessagesRepository _messagesRepository;
     private readonly IMapper _mapper;
 
-    public GetChatByIdRequestHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper)
+    public GetChatByIdRequestHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper, IMessagesRepository messagesRepository)
     {
         _chatRepository = chatRepository;
         _usersRepository = usersRepository;
         _mapper = mapper;
+        _messagesRepository = messagesRepository;
     }
 
     public async Task<ChatDTO> Handle(GetChatByIdRequest request, CancellationToken cancellationToken)

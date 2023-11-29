@@ -29,6 +29,7 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
         return await _dbContext.Chats
             .Include(x => x.ChatGroups)
                 .ThenInclude(x => x.User)
+            .Include(x => x.Messages)
             .Where(x=>x.ChatGroups.Select(x => x.UserId).Contains(id))
             .ToListAsync();
     }
@@ -37,6 +38,8 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
     {
         return await _dbContext.Chats
             .Include(x => x.ChatGroups)
+                .ThenInclude(x => x.User)
+            .Include(x => x.Messages)
             .Where(x => x.ChatGroups.Select(x => x.UserId).Contains(userId))
             .Where(x => x.Id == id)
             .FirstAsync();

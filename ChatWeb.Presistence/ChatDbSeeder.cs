@@ -37,10 +37,8 @@ public static class OnlineTestingDbSeeder
             {
                 UserEntity user = new()
                 {
-                    FirstName = "Admin",
-                    LastName = "Admin",
                     Email = "admin@localhost",
-                    UserName = "admin@localhost"
+                    UserName = "admin"
                 };
                 var result = userManager.CreateAsync(user, "123456")
                     .Result;

@@ -24,10 +24,10 @@ public class UsersController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
-    public async Task<ActionResult<UserDTO>> Get([FromQuery] string searchBy)
+    public async Task<ActionResult<UserDTO>> Get([FromQuery] string? searchBy)
     {
         string username = User.FindFirstValue(ClaimTypes.Name);
-        var users = await _mediator.Send(new GetUsersListRequest(searchBy, username));
+        var users = await _mediator.Send(new GetUsersListRequest(searchBy ?? "", username));
         return Ok(users);
     }
 

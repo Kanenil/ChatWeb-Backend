@@ -12,7 +12,8 @@ public class MessagesRepository : GenericRepository<MessageEntity>, IMessagesRep
     public async Task<IEnumerable<MessageEntity>> GetAllByChatIdAsync(int id)
     {
         return await _dbContext.Messages
-                     .Where(x => x.ChatId == id)
-                     .ToListAsync();
+            .Include(m => m.User)
+            .Where(x => x.ChatId == id)
+            .ToListAsync();
     }
 }

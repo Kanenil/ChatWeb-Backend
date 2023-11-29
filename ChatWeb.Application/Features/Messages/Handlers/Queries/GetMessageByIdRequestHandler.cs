@@ -7,29 +7,30 @@ using MediatR;
 
 namespace ChatWeb.Application.Features.Messages.Handlers.Queries;
 
-public class GetMessagesListRequestHandler : IRequestHandler<GetMessagesListRequest, List<MessageDTO>>
+public class GetMessageByIdRequestHandler : IRequestHandler<GetMessageByIdRequest, MessageDTO>
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;
 
-    public GetMessagesListRequestHandler(IMessagesRepository messagesRepository, IUsersRepository usersRepository, IMapper mapper)
+    public GetMessageByIdRequestHandler(IMessagesRepository messagesRepository, IUsersRepository usersRepository, IMapper mapper)
     {
         _messagesRepository = messagesRepository;
         _usersRepository = usersRepository;
         _mapper = mapper;
     }
 
-    public async Task<List<MessageDTO>> Handle(GetMessagesListRequest request, CancellationToken cancellationToken)
+    public async Task<MessageDTO> Handle(GetMessageByIdRequest request, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByUsernameAsync(request.Username);
 
-        if (!user.ChatGroups.Select(x => x.ChatId).Contains(request.ChatId))
+        var message = await _messagesRepository.GetAsync(request.MessageId);
+
+        if(!user.ChatGroups.Select(x=>x.ChatId).Contains(message.ChatId))
         {
-            throw new BadRequestException($"User {request.Username} don't have this chat!");
+            throw new BadRequestException($"User {request.Username} don't have chat with this message!");
         }
-        
-        var messages = await _messagesRepository.GetAllByChatIdAsync(request.ChatId);
-        return _mapper.Map<List<MessageDTO>>(messages);
+
+        return _mapper.Map<MessageDTO>(message);
     }
 }

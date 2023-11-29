@@ -39,8 +39,8 @@ public class ChatsController : ControllerBase
     public async Task<ActionResult<ChatDTO>> Get(int id)
     {
         string username = User.FindFirstValue(ClaimTypes.Name);
-        var chats = await _mediator.Send(new GetChatByIdRequest(id, username));
-        return Ok(chats);
+        var chat = await _mediator.Send(new GetChatByIdRequest(id, username));
+        return Ok(chat);
     }
 
     // POST api/<ChatsController>

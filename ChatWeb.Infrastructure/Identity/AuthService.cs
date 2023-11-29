@@ -80,9 +80,7 @@ public class AuthService : IAuthService
                 user = new UserEntity
                 {
                     Email = payload.Email,
-                    FirstName = model.FirstName,
-                    UserName = payload.Email,
-                    LastName = model.LastName,
+                    UserName = model.UserName,
                     Image = model.Image
                 };
 
@@ -103,18 +101,21 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> Login(AuthRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByNameAsync(request.Username);
 
         if (user == null)
         {
-            throw new NotFoundException($"User with", request.Email);
+            user = await _userManager.FindByEmailAsync(request.Username);
+
+            if (user == null)
+                throw new NotFoundException($"User with", request.Username);
         }
 
         var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
 
         if (!result.Succeeded)
         {
-            throw new BadRequestException($"Credentials for '{request.Email} aren't valid'.");
+            throw new BadRequestException($"Credentials for '{request.Username} aren't valid'.");
         }
 
         var token = await _jwtTokenService.CreateTokenAsync(user);
@@ -132,10 +133,10 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> Register(RegistrationRequest request)
     {
-        var existingUser = await _userManager.FindByEmailAsync(request.Email);
+        var existingUser = await _userManager.FindByNameAsync(request.UserName);
 
         if (existingUser != null)
-            throw new BadRequestException($"Email '{request.Email}' already exists.");
+            throw new BadRequestException($"User '{request.UserName}' already exists.");
 
         var user = _mapper.Map<UserEntity>(request);
 

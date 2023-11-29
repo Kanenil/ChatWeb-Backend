@@ -23,15 +23,26 @@ public class MessagesController : ControllerBase
         _mediator = mediator;
     }
 
-    // GET api/<MessagesController>/{id}
-    [HttpGet("{id}")]
+    // GET api/<MessagesController>/chat/{id}
+    [HttpGet("chat/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
-    public async Task<ActionResult<ChatDTO>> Get(int id)
+    public async Task<ActionResult<MessageDTO>> Get(int id)
     {
         string username = User.FindFirstValue(ClaimTypes.Name);
         var messages = await _mediator.Send(new GetMessagesListRequest(username, id));
         return Ok(messages);
+    }
+
+    // GET api/<MessagesController>/message/{id}
+    [HttpGet("message/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
+    public async Task<ActionResult<MessageDTO>> GetByMessageId(int id)
+    {
+        string username = User.FindFirstValue(ClaimTypes.Name);
+        var message = await _mediator.Send(new GetMessageByIdRequest(username, id));
+        return Ok(message);
     }
 
     // POST api/<MessagesController>

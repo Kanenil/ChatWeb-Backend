@@ -9,8 +9,7 @@ public class UsersProfile : Profile
 {
     public UsersProfile()
     {
-        CreateMap<RegistrationRequest, UserEntity>()
-            .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
+        CreateMap<RegistrationRequest, UserEntity>();
         CreateMap<UserEntity, ChatUserDTO>();
         CreateMap<UserEntity, UserDTO>();
     }
