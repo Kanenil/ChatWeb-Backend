@@ -34,7 +34,7 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
             .ToListAsync();
     }
 
-    public async Task<ChatEntity> GetByUserIdAsync(int id, int userId)
+    public async Task<ChatEntity?> GetByUserIdAsync(int id, int userId)
     {
         return await _dbContext.Chats
             .Include(x => x.ChatGroups)
@@ -42,6 +42,6 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
             .Include(x => x.Messages)
             .Where(x => x.ChatGroups.Select(x => x.UserId).Contains(userId))
             .Where(x => x.Id == id)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
     }
 }

@@ -24,6 +24,7 @@ public class JwtTokenService : IJwtTokenService
         _config = config;
         _userManager = userManager;
     }
+
     public async Task<AuthResponse> CreateTokenAsync(UserEntity user)
     {
         var roles = await _userManager.GetRolesAsync(user);

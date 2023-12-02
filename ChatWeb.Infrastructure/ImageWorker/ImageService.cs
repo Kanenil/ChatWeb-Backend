@@ -80,7 +80,7 @@ public class ImageService : IImageService
         }
     }
 
-    public Image ConvertBase64ToImage(string base64String)
+    private Image ConvertBase64ToImage(string base64String)
     {
         try
         {

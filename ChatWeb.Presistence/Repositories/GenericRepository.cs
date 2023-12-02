@@ -48,6 +48,4 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
     }
-
-
 }
