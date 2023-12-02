@@ -24,4 +24,8 @@
     <ProjectReference Include="..\ChatWeb.Presistence\ChatWeb.Presistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="images\" />
+  </ItemGroup>
+
 </Project>

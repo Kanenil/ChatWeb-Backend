@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatWeb.Application.Contracts.Infrastructure;
 using ChatWeb.Application.Contracts.Persistence;
 using ChatWeb.Application.Features.Chats.Requests.Commands;
 using ChatWeb.Application.Models.Responses;
@@ -11,12 +12,14 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, BaseC
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IImageService _imageService;
     private readonly IMapper _mapper;
 
-    public CreateChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper)
+    public CreateChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper, IImageService imageService)
     {
         _chatRepository = chatRepository;
         _usersRepository = usersRepository;
+        _imageService = imageService;
         _mapper = mapper;
     }
 
@@ -29,6 +32,11 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, BaseC
         
         chat.CreateAuthorId = user.Id;
         chat.LastEditionAuthorId = user.Id;
+
+        if (!string.IsNullOrEmpty(request.ChatDTO.Image))
+        {
+            chat.Image = _imageService.SaveImageFromBase64(request.ChatDTO.Image);
+        }
 
         await _chatRepository.AddAsync(chat);
         await _chatRepository.SaveAsync();

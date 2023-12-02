@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ChatWeb.API.Middleware;
+using ChatWeb.Application.Hubs;
+using Microsoft.Extensions.FileProviders;
 
 var MyCorsPolicy = "MyCorsPolicy";
 
@@ -50,6 +52,22 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
+    cfg.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            // If the request is for our hub...
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chat")))
+            {
+                // Read the token out of the query string
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddControllers();
@@ -57,14 +75,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyCorsPolicy,
                       policy =>
                       {
-                          policy.WithOrigins(builder.Configuration["FrontEndURL"]).AllowAnyMethod().AllowAnyHeader();
+                          policy.WithOrigins(builder.Configuration["FrontEndURL"])
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials()
+                          .SetIsOriginAllowed((host) => true);
                       });
 });
+
 
 var app = builder.Build();
 
@@ -76,6 +101,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+if (!Directory.Exists(dir))
+    Directory.CreateDirectory(dir);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(dir),
+    RequestPath = "/images"
+});
+
 app.UseCors(MyCorsPolicy);
 
 app.UseAuthentication();
@@ -83,5 +117,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.SeedData();
+
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

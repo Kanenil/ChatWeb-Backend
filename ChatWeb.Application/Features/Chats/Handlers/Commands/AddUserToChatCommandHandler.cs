@@ -1,8 +1,10 @@
 ﻿using ChatWeb.Application.Contracts.Persistence;
 using ChatWeb.Application.Exceptions;
 using ChatWeb.Application.Features.Chats.Requests.Commands;
+using ChatWeb.Application.Hubs;
 using ChatWeb.Application.Models.Responses;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatWeb.Application.Features.Chats.Handlers.Commands;
 
@@ -35,6 +37,8 @@ public class AddUserToChatCommandHandler : IRequestHandler<AddUserToChatCommand,
 
         await _chatRepository.AddChatGroupAsync(new() { ChatId = chat.Id, UserId = request.UserId });
         await _chatRepository.SaveAsync();
+
+        var user = await _usersRepository.GetAsync(request.UserId);
 
         response.Success = true;
         response.Message = "Creation Successful";

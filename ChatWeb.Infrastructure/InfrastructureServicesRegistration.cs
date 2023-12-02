@@ -1,6 +1,7 @@
 ﻿using ChatWeb.Application.Contracts.Identity;
 using ChatWeb.Application.Contracts.Infrastructure;
 using ChatWeb.Infrastructure.Identity;
+using ChatWeb.Infrastructure.ImageWorker;
 using ChatWeb.Infrastructure.JwtToken;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ namespace ChatWeb.Infrastructure
             services.AddTransient<IJwtTokenService, JwtTokenService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IImageService, ImageService>();
 
             return services;
         }
