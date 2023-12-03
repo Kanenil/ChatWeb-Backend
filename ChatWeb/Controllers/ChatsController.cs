@@ -55,6 +55,18 @@ public class ChatsController : ControllerBase
         return Ok(response);
     }
 
+    // PUT api/<ChatsController>
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
+    public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] EditChatDTO chat)
+    {
+        string username = User.FindFirstValue(ClaimTypes.Name);
+        var command = new EditChatCommand(chat, username);
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
     // POST api/<ChatsController>
     [HttpPost("{chatId}/add/{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

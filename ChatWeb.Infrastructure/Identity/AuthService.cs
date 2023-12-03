@@ -17,14 +17,16 @@ public class AuthService : IAuthService
     private readonly UserManager<UserEntity> _userManager;
     private readonly SignInManager<UserEntity> _signInManager;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly IImageService _imageService;
     private readonly IMapper _mapper;
 
-    public AuthService(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, IJwtTokenService jwtTokenService, IMapper mapper)
+    public AuthService(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, IJwtTokenService jwtTokenService, IMapper mapper, IImageService imageService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _jwtTokenService = jwtTokenService;
         _mapper = mapper;
+        _imageService = imageService;
     }
 
     public async Task<AuthResponse> GoogleLogin(string googleToken)
@@ -81,7 +83,7 @@ public class AuthService : IAuthService
                 {
                     Email = payload.Email,
                     UserName = model.UserName,
-                    Image = model.Image
+                    Image = await _imageService.SaveImageFromURL(model.Image)
                 };
 
                 var resultCreate = await _userManager.CreateAsync(user);

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace ChatWeb.Application.DTOs.Chats;
+﻿namespace ChatWeb.Application.DTOs.Chats;
 
 public class CreateChatDTO
 {

@@ -19,6 +19,15 @@ public class ImageService : IImageService
         return Save(bmp);
     }
 
+    public void RemoveImage(string filename)
+    {
+        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "images", filename);
+        if(File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+    }
+
     private string Save(Bitmap bmp)
     {
         var fileName = Path.GetRandomFileName() + ".jpg";

@@ -10,7 +10,7 @@ public class ChatsProfile : Profile
     {
         CreateMap<CreateChatDTO, ChatEntity>();
         CreateMap<ChatEntity, ChatDTO>()
-            .ForMember(x => x.Users, x => x.MapFrom(x => x.ChatGroups.Select(x => x.User)))
+            .ForMember(x => x.Users, x => x.MapFrom(x => x.ChatGroups.Select(x => x.User).Where(x => x.UserName != "ChatInfo")))
             .ForMember(x => x.LastMessage, x => x.MapFrom(x => x.Messages.OrderByDescending(x => x.DateCreated).FirstOrDefault()));  //;
     }
 }

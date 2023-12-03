@@ -44,6 +44,11 @@ public class ChatHub : Hub
         await Clients.Group($"user:{user.UserName}").SendAsync("AddedToChat", chatId);
     }
 
+    public async Task UpdateChat(int chatId)
+    {
+        await Clients.Group(chatId.ToString()).SendAsync("UpdateChat", chatId);
+    }
+
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         try

@@ -29,6 +29,7 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, BaseC
 
         var chat = _mapper.Map<ChatEntity>(request.ChatDTO);
         var user = await _usersRepository.GetUserByUsernameAsync(request.Username);
+        var system = await _usersRepository.GetUserByUsernameAsync("ChatInfo");
         
         chat.CreateAuthorId = user.Id;
         chat.LastEditionAuthorId = user.Id;
@@ -42,6 +43,7 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, BaseC
         await _chatRepository.SaveAsync();
 
         await _chatRepository.AddChatGroupAsync(new() { ChatId = chat.Id, UserId = user.Id });
+        await _chatRepository.AddChatGroupAsync(new() { ChatId = chat.Id, UserId = system.Id });
         await _chatRepository.SaveAsync();
 
         response.Success = true;

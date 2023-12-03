@@ -49,6 +49,7 @@ public class UsersRepository : GenericRepository<UserEntity>, IUsersRepository
                 .ThenInclude(x => x.Chat)
             .Where(x => x.UserName.ToLower().Contains(searchBy.ToLower()))
             .Where(x => x.UserName != username)
+            .Where(x => x.UserName != "ChatInfo")
             .ToListAsync();
     }
 }

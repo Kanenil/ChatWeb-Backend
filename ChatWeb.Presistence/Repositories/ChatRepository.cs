@@ -30,7 +30,7 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
             .Include(x => x.ChatGroups)
                 .ThenInclude(x => x.User)
             .Include(x => x.Messages)
-            .Where(x=>x.ChatGroups.Select(x => x.UserId).Contains(id))
+            .Where(x => x.ChatGroups.Select(x => x.UserId).Contains(id))
             .ToListAsync();
     }
 
