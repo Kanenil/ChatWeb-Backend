@@ -9,6 +9,8 @@ public class MessagesProfile : Profile
     public MessagesProfile()
     {
         CreateMap<MessageEntity, MessageDTO>();
-        CreateMap<CreateMessageDTO, MessageEntity>();
+        CreateMap<CreateMessageDTO, MessageEntity>()
+            .ForMember(x => x.Content, x => x.MapFrom(x => x.Content ?? ""))
+            .ForMember(x => x.FileName, x => x.MapFrom(x => ""));
     }
 }

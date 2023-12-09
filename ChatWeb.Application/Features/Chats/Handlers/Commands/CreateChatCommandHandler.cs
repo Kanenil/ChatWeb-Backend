@@ -12,10 +12,10 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, BaseC
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUsersRepository _usersRepository;
-    private readonly IImageService _imageService;
+    private readonly IUploadService _imageService;
     private readonly IMapper _mapper;
 
-    public CreateChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper, IImageService imageService)
+    public CreateChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IMapper mapper, IUploadService imageService)
     {
         _chatRepository = chatRepository;
         _usersRepository = usersRepository;

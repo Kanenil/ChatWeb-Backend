@@ -11,10 +11,10 @@ public class EditChatCommandHandler : IRequestHandler<EditChatCommand, BaseComma
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUsersRepository _usersRepository;
-    private readonly IImageService _imageService;
+    private readonly IUploadService _imageService;
     private readonly IMessagesRepository _messagesRepository;
 
-    public EditChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IImageService imageService, IMessagesRepository messagesRepository)
+    public EditChatCommandHandler(IChatRepository chatRepository, IUsersRepository usersRepository, IUploadService imageService, IMessagesRepository messagesRepository)
     {
         _chatRepository = chatRepository;
         _usersRepository = usersRepository;
@@ -36,13 +36,13 @@ public class EditChatCommandHandler : IRequestHandler<EditChatCommand, BaseComma
 
         if(chat.Name != request.ChatDTO.Name)
         {
-            message = $"Group member {user.UserName} has changed a Group Name from \"{chat.Name}\" to \"{request.ChatDTO.Name}\"";
+            message = $"Group member {user.UserName} has changed a Group's Name from \"{chat.Name}\" to \"{request.ChatDTO.Name}\"";
             chat.Name = request.ChatDTO.Name;
         }
 
         if (!string.IsNullOrEmpty(request.ChatDTO.Image) && request.ChatDTO.Image.Split(',').Length == 2)
         {
-            message += string.IsNullOrEmpty(message) ? $"Group member {user.UserName} has changed a Group Image" : " and a Group Image";
+            message += string.IsNullOrEmpty(message) ? $"Group member {user.UserName} has changed a Group's Image" : " and a Group's Image";
 
             if(chat.Image != null)
             {
@@ -53,7 +53,7 @@ public class EditChatCommandHandler : IRequestHandler<EditChatCommand, BaseComma
 
         if (string.IsNullOrEmpty(request.ChatDTO.Image) && chat.Image != null)
         {
-            message += string.IsNullOrEmpty(message) ? $"Group member {user.UserName} has removed a Group Image" : " and removed a Group Image";
+            message += string.IsNullOrEmpty(message) ? $"Group member {user.UserName} has removed a Group's Image" : " and removed a Group's Image";
             
             _imageService.RemoveImage(chat.Image);
             chat.Image = null;

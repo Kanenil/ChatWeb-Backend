@@ -1,10 +1,11 @@
 ﻿using ChatWeb.Application.Contracts.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace ChatWeb.Infrastructure.ImageWorker;
+namespace ChatWeb.Infrastructure.UploadWorker;
 
-public class ImageService : IImageService
+public class UploadService : IUploadService
 {
 
     public string SaveImageFromBase64(string base64)
@@ -19,20 +20,61 @@ public class ImageService : IImageService
         return Save(bmp);
     }
 
+    public async Task<string> SaveFileFromIFormFile(IFormFile formFile)
+    {
+        var postedFileExtension = Path.GetExtension(formFile.FileName);
+        if (!string.Equals(postedFileExtension, ".jpg", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(postedFileExtension, ".png", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(postedFileExtension, ".gif", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(postedFileExtension, ".jpeg", StringComparison.OrdinalIgnoreCase))
+        {
+            return await Save(formFile);
+        }
+
+        var bmp = new Bitmap(await IFormFileToBitmap(formFile));
+
+        return Save(bmp);
+    }
+
+    private static async Task<Bitmap> IFormFileToBitmap(IFormFile file)
+    {
+        using (MemoryStream ms = new())
+        {
+            await file.CopyToAsync(ms);
+            ms.Position = 0;
+            Image img = Image.FromStream(ms);
+            ms.Close();
+            return new Bitmap(img);
+        }
+    }
+
     public void RemoveImage(string filename)
     {
-        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "images", filename);
+        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads", filename);
         if(File.Exists(fullPath))
         {
             File.Delete(fullPath);
         }
     }
 
+    private async Task<string> Save(IFormFile file)
+    {
+        var fileExtension = Path.GetExtension(file.FileName);
+        var fileName = Path.GetRandomFileName() + fileExtension;
+        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "uploads", fileName);
+
+        File.Create(dirSaveImage).Close();
+        using FileStream fs = File.OpenWrite(dirSaveImage);
+        await file.CopyToAsync(fs);
+
+        return fileName;
+    }
+
     private string Save(Bitmap bmp)
     {
         var fileName = Path.GetRandomFileName() + ".jpg";
-        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", fileName);
-        var saveImage = CompressImage(bmp, 500, 500);
+        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "uploads", fileName);
+        var saveImage = CompressImage(bmp, bmp.Width, bmp.Height);
         saveImage.Save(dirSaveImage, ImageFormat.Jpeg);
         return fileName;
     }
@@ -125,4 +167,5 @@ public class ImageService : IImageService
             }
         }
     }
+
 }

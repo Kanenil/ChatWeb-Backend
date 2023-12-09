@@ -9,6 +9,7 @@ using System.Text;
 using ChatWeb.API.Middleware;
 using ChatWeb.Application.Hubs;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var MyCorsPolicy = "MyCorsPolicy";
 
@@ -95,22 +96,22 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
-var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+app.UseCors(MyCorsPolicy);
+
+var dir = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 if (!Directory.Exists(dir))
     Directory.CreateDirectory(dir);
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(dir),
-    RequestPath = "/images"
+    RequestPath = "/uploads"
 });
-
-app.UseCors(MyCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

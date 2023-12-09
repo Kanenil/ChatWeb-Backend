@@ -25,6 +25,13 @@ public class AccountController : ControllerBase
         return Ok(await _accountService.Profile(name));
     }
 
+    [HttpPost("edit")]
+    public async Task<ActionResult<UserDTO>> Edit(UserDTO user)
+    {
+        string name = User.FindFirstValue(ClaimTypes.Name);
+        return Ok(await _accountService.EditProfile(user, name));
+    }
+
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
     {

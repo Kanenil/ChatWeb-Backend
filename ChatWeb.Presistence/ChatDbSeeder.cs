@@ -24,7 +24,7 @@ public static class OnlineTestingDbSeeder
                 .GetRequiredService<RoleManager<RoleEntity>>();
 
             var imageService = scope.ServiceProvider
-                .GetRequiredService<IImageService>();
+                .GetRequiredService<IUploadService>();
 
             if (!context.Roles.Any())
             {

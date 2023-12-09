@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ChatWeb.Application.Contracts.Infrastructure;
 using ChatWeb.Application.Contracts.Persistence;
 using ChatWeb.Application.Exceptions;
 using ChatWeb.Application.Features.Messages.Requests.Commands;
@@ -12,13 +13,15 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IMessagesRepository _messagesRepository;
+    private readonly IUploadService _imageService;
     private readonly IMapper _mapper;
 
-    public CreateMessageCommandHandler(IUsersRepository usersRepository, IMessagesRepository messagesRepository, IMapper mapper)
+    public CreateMessageCommandHandler(IUsersRepository usersRepository, IMessagesRepository messagesRepository, IMapper mapper, IUploadService imageService)
     {
         _usersRepository = usersRepository;
         _messagesRepository = messagesRepository;
         _mapper = mapper;
+        _imageService = imageService;
     }
 
     public async Task<BaseCommandResponse> Handle(CreateMessageCommand request, CancellationToken cancellationToken)
@@ -31,6 +34,16 @@ public class CreateMessageCommandHandler : IRequestHandler<CreateMessageCommand,
         if(!user.ChatGroups.Select(x => x.ChatId).Contains(request.MessageDTO.ChatId))
         {
             throw new BadRequestException($"User {request.Username} don't have this chat!");
+        }
+
+        if(string.IsNullOrEmpty(request.MessageDTO.Content) && request.MessageDTO.File == null)
+        {
+            throw new BadRequestException($"Content and File can't be null on the same time!");
+        }
+
+        if(request.MessageDTO.File != null)
+        {
+            message.FileName = await _imageService.SaveFileFromIFormFile(request.MessageDTO.File);
         }
 
         message.UserId = user.Id;

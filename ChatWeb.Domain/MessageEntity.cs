@@ -11,6 +11,9 @@ public class MessageEntity : BaseEntity<int>
     [StringLength(500)]
     public string Content { get; set; } = string.Empty;
 
+    [StringLength(100)]
+    public string FileName { get; set; } = string.Empty;
+
     [ForeignKey("Chat")]
     public int ChatId { get; set; }
     public virtual ChatEntity Chat { get; set; }

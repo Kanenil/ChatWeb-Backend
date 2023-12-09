@@ -1,4 +1,6 @@
-﻿namespace ChatWeb.Application.DTOs.Messages;
+﻿using Microsoft.AspNetCore.Http;
 
-public record CreateMessageDTO(string Content, int ChatId)
+namespace ChatWeb.Application.DTOs.Messages;
+
+public record CreateMessageDTO(string? Content, IFormFile? File, int ChatId)
 {}

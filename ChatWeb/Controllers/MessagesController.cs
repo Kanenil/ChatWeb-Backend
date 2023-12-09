@@ -49,7 +49,7 @@ public class MessagesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
-    public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateMessageDTO message)
+    public async Task<ActionResult<BaseCommandResponse>> Post([FromForm] CreateMessageDTO message)
     {
         string username = User.FindFirstValue(ClaimTypes.Name);
         var command = new CreateMessageCommand(message, username);
