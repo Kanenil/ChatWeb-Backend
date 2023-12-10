@@ -3,7 +3,6 @@ using ChatWeb.Application.Contracts.Persistence;
 using ChatWeb.Application.Features.Chats.Requests.Commands;
 using ChatWeb.Application.Models.Responses;
 using MediatR;
-using System.Text.RegularExpressions;
 
 namespace ChatWeb.Application.Features.Chats.Handlers.Commands;
 

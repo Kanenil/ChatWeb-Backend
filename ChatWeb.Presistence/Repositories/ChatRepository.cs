@@ -44,4 +44,16 @@ public class ChatRepository : GenericRepository<ChatEntity>, IChatRepository
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
+
+    public async void RemoveChatGroup(ChatGroupEntity chatGroup)
+    {
+        var chatGroupToDelete = await _dbContext.ChatGroups.FindAsync(chatGroup.UserId, chatGroup.ChatId);
+
+        if (chatGroupToDelete != null)
+        {
+            _dbContext.ChatGroups.Remove(chatGroupToDelete);
+        }
+
+        _dbContext.Remove(chatGroup);
+    }
 }

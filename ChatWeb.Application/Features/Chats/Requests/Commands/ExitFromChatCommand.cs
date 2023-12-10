@@ -3,6 +3,5 @@ using MediatR;
 
 namespace ChatWeb.Application.Features.Chats.Requests.Commands;
 
-public record AddUserToChatCommand(int ChatId, int UserId, string Username) : IRequest<BaseCommandResponse>
+public record ExitFromChatCommand(int ChatId, string Username) : IRequest<BaseCommandResponse>
 { }
-

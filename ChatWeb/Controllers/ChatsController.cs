@@ -73,7 +73,20 @@ public class ChatsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
     public async Task<ActionResult<BaseCommandResponse>> AddUserToChat(int chatId, int userId)
     {
-        var command = new AddUserToChatCommand(chatId, userId);
+        string username = User.FindFirstValue(ClaimTypes.Name);
+        var command = new AddUserToChatCommand(chatId, userId, username);
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
+    // DELETE api/<ChatsController>/leave
+    [HttpDelete("leave/{chatId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
+    public async Task<ActionResult<BaseCommandResponse>> LeaveFromChat(int chatId)
+    {
+        string username = User.FindFirstValue(ClaimTypes.Name);
+        var command = new ExitFromChatCommand(chatId, username);
         var response = await _mediator.Send(command);
         return Ok(response);
     }
