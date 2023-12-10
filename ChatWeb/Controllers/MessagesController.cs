@@ -7,6 +7,7 @@ using ChatWeb.Application.Models.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace ChatWeb.API.Controllers;
@@ -46,6 +47,7 @@ public class MessagesController : ControllerBase
     }
 
     // POST api/<MessagesController>
+    [EnableRateLimiting("fixed")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]

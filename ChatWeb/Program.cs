@@ -9,6 +9,7 @@ using System.Text;
 using ChatWeb.API.Middleware;
 using ChatWeb.Application.Hubs;
 using Microsoft.Extensions.FileProviders;
+using System.Threading.RateLimiting;
 
 var MyCorsPolicy = "MyCorsPolicy";
 
@@ -91,6 +92,20 @@ builder.Services.AddCors(options =>
 });
 
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("fixed", httpContext =>
+    RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.User.Identity?.Name?.ToString(),
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 10,
+            Window = TimeSpan.FromSeconds(30)
+        }));
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -117,6 +132,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.SeedData();
+
+app.UseRateLimiter();
 
 app.MapHub<ChatHub>("/chat");
 

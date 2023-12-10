@@ -6,6 +6,7 @@ using ChatWeb.Application.Models.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace ChatWeb.API.Controllers;
@@ -44,6 +45,7 @@ public class ChatsController : ControllerBase
     }
 
     // POST api/<ChatsController>
+    [EnableRateLimiting("fixed")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
@@ -56,6 +58,7 @@ public class ChatsController : ControllerBase
     }
 
     // PUT api/<ChatsController>
+    [EnableRateLimiting("fixed")]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
@@ -68,6 +71,7 @@ public class ChatsController : ControllerBase
     }
 
     // POST api/<ChatsController>
+    [EnableRateLimiting("fixed")]
     [HttpPost("{chatId}/add/{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
@@ -80,6 +84,7 @@ public class ChatsController : ControllerBase
     }
 
     // DELETE api/<ChatsController>/leave
+    [EnableRateLimiting("fixed")]
     [HttpDelete("leave/{chatId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorDeatils))]
