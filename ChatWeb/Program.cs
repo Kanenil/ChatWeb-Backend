@@ -9,7 +9,6 @@ using System.Text;
 using ChatWeb.API.Middleware;
 using ChatWeb.Application.Hubs;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var MyCorsPolicy = "MyCorsPolicy";
 
@@ -96,11 +95,11 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 app.UseCors(MyCorsPolicy);
 
