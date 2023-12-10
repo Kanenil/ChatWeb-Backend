@@ -1,5 +1,6 @@
 ﻿using ChatWeb.Application.Constants;
 using ChatWeb.Application.Contracts.Infrastructure;
+using ChatWeb.Application.Contracts.Persistence;
 using ChatWeb.Domain.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,9 @@ public static class OnlineTestingDbSeeder
 
             var imageService = scope.ServiceProvider
                 .GetRequiredService<IUploadService>();
+
+            var usersRepository = scope.ServiceProvider
+                .GetRequiredService<IUsersRepository>();
 
             if (!context.Roles.Any())
             {
@@ -54,6 +58,10 @@ public static class OnlineTestingDbSeeder
                         .AddToRoleAsync(user, Roles.Admin)
                         .Result;
                 }
+
+                user.PasswordHash = null;
+
+                Task.WaitAll(usersRepository.UpdateAsync(user), usersRepository.SaveAsync());
             }
         }
     }
